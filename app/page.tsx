@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Dish = {
   id: number;
@@ -72,6 +72,20 @@ export default function Home() {
   const [cart, setCart] = useState<Record<number, number>>({});
   const [cartOpen, setCartOpen] = useState(false);
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    apiCall()
+  }, [])
+
+  async function apiCall() {
+    try{
+      const res = await fetch('/api')
+      const data = await res.json();
+      console.log(data, 'result')
+    } catch(e) {
+
+    }
+  }
 
   const visibleDishes = useMemo(
     () =>
