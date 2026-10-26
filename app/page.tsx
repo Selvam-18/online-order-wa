@@ -108,6 +108,41 @@ export default function Home() {
     });
   }
 
+  const handleProceed = async () => {
+  const orderData = {
+    items: dishes
+      .filter((dish) => (cart[dish.id] ?? 0) > 0)
+      .map((dish) => ({
+        id: dish.id,
+        name: dish.name,
+        quantity: cart[dish.id],
+        price: dish.price,
+        subtotal: dish.price * cart[dish.id],
+      })),
+
+    total: dishes.reduce(
+      (sum, dish) =>
+        sum + dish.price * (cart[dish.id] ?? 0),
+      0
+    ),
+
+    currency: "INR",
+  };
+
+  try{
+    const res = await fetch('https://localhost:3001/api/whatsapp/bot-flows/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      })
+    
+    console.log(res.json(), 'res')
+  }catch(e) {
+
+  }
+  console.log("Final Order Data:", orderData);
+};
+
   return (
     <main className="min-h-screen bg-[#f8f5eb] text-[#20231d]">
       {/* Top announcement */}
@@ -424,9 +459,7 @@ export default function Home() {
                   <span className="text-2xl font-black">{money(total)}</span>
                 </div>
                 <button
-                  onClick={() => {
-                    alert("Cart confirmed! WhatsApp integration comes next.");
-                  }}
+                  onClick={handleProceed}
                   className="mt-5 w-full bg-[#20231d] px-5 py-4 text-xs font-black uppercase tracking-[0.2em] text-[#f3d33d] transition hover:bg-[#3d4435] active:scale-[0.99]"
                 >
                   Proceed to order →
