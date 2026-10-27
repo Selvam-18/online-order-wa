@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
+  await new Promise((resolve) => setTimeout(resolve, 30_000));
     const data = {
   "currency": "INR",
   "items": [
